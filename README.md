@@ -12,12 +12,6 @@ Welcome to **IntelliSuite**, a state-of-the-art AI SaaS platform featuring five 
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
-  - [Environment Variables](#environment-variables)
-  - [Database Setup](#database-setup)
-- [Usage](#usage)
-- [Stripe Integration](#stripe-integration)
-- [Contribution](#contribution)
-- [License](#license)
 
 ## Overview
 
