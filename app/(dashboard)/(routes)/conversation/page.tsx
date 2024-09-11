@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import { useState } from "react";
 
+import { Empty } from "@/components/empty";
+
 const ConversationPage = () => {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
@@ -34,16 +36,26 @@ const ConversationPage = () => {
       };
       const newMessages = [...messages, userMessage];
 
+      // Send request to the API with the updated messages
       const response = await axios.post("/api/conversation", {
         messages: newMessages,
       });
-      setMessages((current) => [...current, userMessage, response.data]);
-      form.reset();
+
+      // Ensure that response.data is an object with `role` and `content`
+      const assistantMessage: ChatCompletionMessageParam = {
+        role: "assistant",
+        content: response.data,
+      };
+
+      // Update messages state with both user and assistant messages
+      setMessages((current) => [...current, userMessage, assistantMessage]);
+
+      form.reset(); // Reset the form after submission
     } catch (error: any) {
-      //TODO: Open Pro Model
+      // Handle the error (e.g., show a notification or modal)
       console.error(error);
     } finally {
-      router.refresh();
+      router.refresh(); // Refresh the page
     }
   };
 
@@ -92,12 +104,38 @@ const ConversationPage = () => {
           </Form>
         </div>
         <div className="space-y-4 mt-4">
+          {messages.length === 0 && !isLoading && (
+            <div className="p-2 rounded bg-gray-100">
+              <Empty label="Start a conversation by typing a prompt in the input field above" />
+            </div>
+          )}
           <div className="flex flex-col-reverse gap-y-4">
-            {messages.map((message, index) => (
-              <div key={`${message.content}-${index}`} className={`flex gap-x-4 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className="p-2 bg-gray-100 rounded-lg">{typeof message.content === "string" ? <p>{message.content}</p> : null}</div>
-              </div>
-            ))}
+            {messages.map((message, index) => {
+              // Determine the content type
+              let contentToRender;
+              if (typeof message.content === "string") {
+                contentToRender = message.content;
+              } else if (Array.isArray(message.content)) {
+                contentToRender = message.content
+                  .map((part) => {
+                    if (typeof part === "string") {
+                      return part;
+                    } else if ("text" in part) {
+                      return part.text;
+                    }
+                    return ""; // Default to an empty string if no valid content
+                  })
+                  .join(""); // Join array parts into a single string for rendering
+              } else {
+                contentToRender = ""; // Default to empty string for unexpected cases
+              }
+
+              return (
+                <div key={index} className={`p-2 rounded ${message.role === "user" ? "bg-blue-100" : "bg-green-100"}`}>
+                  <strong>{message.role === "user" ? "User:" : "Assistant:"}</strong> {contentToRender}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
