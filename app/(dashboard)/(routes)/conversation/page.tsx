@@ -15,6 +15,9 @@ import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import { useState } from "react";
 
 import { Empty } from "@/components/empty";
+import { Loader } from "@/components/loader";
+import { UserAvatar } from "@/components/user-avatar";
+import { BotAvatar } from "@/components/bot-avatar";
 
 const ConversationPage = () => {
   const router = useRouter();
@@ -104,6 +107,15 @@ const ConversationPage = () => {
           </Form>
         </div>
         <div className="space-y-4 mt-4">
+          {isLoading && (
+            <div
+              className="p-8 rounded-lg w-full flex items-center
+            justify-center bg-muted"
+            >
+              <Loader />
+            </div>
+          )}
+
           {messages.length === 0 && !isLoading && (
             <div className="p-2 rounded bg-gray-100">
               <Empty label="Start a conversation by typing a prompt in the input field above" />
@@ -131,8 +143,9 @@ const ConversationPage = () => {
               }
 
               return (
-                <div key={index} className={`p-2 rounded ${message.role === "user" ? "bg-blue-100" : "bg-green-100"}`}>
-                  <strong>{message.role === "user" ? "User:" : "Assistant:"}</strong> {contentToRender}
+                <div key={index} className={`p-2 rounded flex items-center gap-2 ${message.role === "user" ? "bg-blue-100" : "bg-green-100"}`}>
+                  {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                  <p>{contentToRender}</p>
                 </div>
               );
             })}
