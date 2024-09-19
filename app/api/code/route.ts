@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai"; // Updated import for the new OpenAI client
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
-// Initialize OpenAI with the new way
+// Initialize OpenAI
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // This is the default, can be omitted if it's already set
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const instrucionMessage: ChatCompletionMessageParam = {
