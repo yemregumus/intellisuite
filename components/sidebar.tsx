@@ -15,44 +15,51 @@ const routes = [
   {
     label: "Dashboard",
     icon: LayoutDashboard,
+    iconColor: "text-pink-500",
     href: "/dashboard",
-    color: "text-pink-500",
+    color: "text-zinc-400",
   },
   {
     label: "Conversation",
     icon: MessageSquare,
+    iconColor: "text-violet-500",
     href: "/conversation",
-    color: "text-violet-500",
+    color: "text-zinc-400",
   },
   {
     label: "Image Generation",
     icon: ImageIcon,
+    iconColor: "text-blue-500",
     href: "/image",
-    color: "text-blue-500",
+    color: "text-zinc-400",
   },
   {
     label: "Video Generation",
     icon: VideoIcon,
+    iconColor: "text-red-500",
     href: "/video",
-    color: "text-red-500",
+    color: "text-zinc-400",
   },
   {
     label: "Music Generation",
     icon: Music,
+    iconColor: "text-orange-500",
     href: "/music",
-    color: "text-orange-500",
+    color: "text-zinc-400",
   },
   {
     label: "Code Generation",
     icon: Code,
+    iconColor: "text-green-500",
     href: "/code",
-    color: "text-green-500",
+    color: "text-zinc-400",
   },
   {
     label: "Settings",
     icon: Settings,
+    iconColor: "text-yellow-500",
     href: "/settings",
-    color: "text-yellow-500",
+    color: "text-zinc-400",
   },
 ];
 
@@ -77,10 +84,10 @@ const Sidebar = () => {
         </Link>
         <div className="space-y-1">
           {routes.map((route) => (
-            <Link href={route.href} key={route.href} className={cn("text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition", pathName === route.href ? "text-white bg-white/10" : "text-zinc-400")}>
+            <Link href={route.href} key={route.href} className={cn("text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition", pathName === route.href ? "text-white bg-white/10" : route.color)}>
               <div className="flex items-center flex-1">
-                <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
-                <div className={cn("ml-4", route.color)}>{route.label}</div>
+                <route.icon className={cn("h-5 w-5 mr-3", route.iconColor)} />
+                <div className={cn("ml-4")}>{route.label}</div>
               </div>
             </Link>
           ))}
